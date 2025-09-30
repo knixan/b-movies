@@ -311,5 +311,3 @@ This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 Built using Next.js, Prisma, Tailwind, and modern web platform capabilities.</sub>
 
-#   b - m o v i e s  
- 
