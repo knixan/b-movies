@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id          Int       @id @default(autoincrement())
+  tmdbId      BigInt?   @unique // Needs to be BigInt or we run into trouble with large IDs
+  title       String
+  releaseDate DateTime?
+  runtime     Int?
+  budget      BigInt?
+  revenue     BigInt?
+  overview    String? //description
+  tagline     String?
+  votes       Int?
+  rating      Float?
+
+  posterPath   String?
+  backdropPath String?
+
+  price Int
+  stock Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  genres    Genre[]
+  OrderItem OrderItem[]
+  movieCrew MovieCrew[]
+}
+
+model Person {
+  id        Int       @id @default(autoincrement())
+  tmdbId    BigInt?   @unique // Needs to be BigInt or we run into trouble with large IDs
+  name      String
+  birthday  DateTime?
+  deathday  DateTime?
+  biography String?
+
+  profilePath String? // profile picture
+
+  movieCrew MovieCrew[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Role can be either crew or cast
+enum Role {
+  CREW
+  CAST
+}
+
+// Junction table to link Person to Movie depending on role
+model MovieCrew {
+  id        Int     @id @default(autoincrement())
+  movieId   Int
+  personId  Int
+  role      Role //crew or cast
+  job       String? // director, writer, actor, producer, ...
+  character String? // unique to actors
+  order     Int? // tmdb ordering of cast (lead actor first etc)
+
+  movie  Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@unique([movieId, personId, role, job, character])
+}
+
+model Genre {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  movies Movie[]
+}
+
+// enum OrderStatus {
+//   PENDING
+//   COMPLETED
+//   CANCELLED
+//   REFUNDED
+//   FAILED
+// }
+
+model Order {
+  id          Int      @id @default(autoincrement())
+  totalAmount Int
+  status      String
+  orderDate   DateTime
+
+  // Kunduppgifter
+  customerEmail      String?
+  customerFirstName  String?
+  customerLastName   String?
+  customerAddress    String?
+  customerCity       String?
+  customerPostalCode String?
+  customerCountry    String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  OrderItem OrderItem[]
+}
+
+model OrderItem {
+  id              Int @id @default(autoincrement())
+  quantity        Int
+  priceAtPurchase Int
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+
+  movieId Int
+  movie   Movie @relation(fields: [movieId], references: [id])
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+
+  role       String?
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
+  Order      Order[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
