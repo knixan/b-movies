@@ -25,7 +25,7 @@ export default async function AdminPage() {
           </Link>
 
           <Link href="/admin/orders">
-            <Button className="w-full">Create order</Button>
+            <Button className="w-full">Handel orders</Button>
           </Link>
 
           <Link href="/admin/genres">
