@@ -94,7 +94,7 @@ export default function GenreFilter({
                         (option.value === "all" && !selectedGenre) ||
                           selectedGenre === option.value
                           ? "opacity-100"
-                          : "opacity-0"
+                          : "opacity-0",
                       )}
                     />
                     {option.label}

@@ -16,26 +16,31 @@
 export function mergeByKey<T, K extends keyof T>(
   items: T[],
   mergeField: K,
-  getKey: (item: T) => number | string
+  getKey: (item: T) => number | string,
 ): T[] {
   return Object.values(
-    items.reduce((acc, item) => {
-      const id = getKey(item);
-      const existing = acc[id];
-      if (existing) {
-        const merged = new Set([
-          ...((typeof existing[mergeField] === "string"
-            ? (existing[mergeField] as string).split(", ").filter(Boolean)
-            : []) as string[]),
-          ...((typeof item[mergeField] === "string"
-            ? (item[mergeField] as string).split(", ").filter(Boolean)
-            : []) as string[]),
-        ]);
-        (existing[mergeField] as T[K]) = Array.from(merged).join(", ") as T[K];
-      } else {
-        acc[id] = { ...item };
-      }
-      return acc;
-    }, {} as Record<string | number, T>)
+    items.reduce(
+      (acc, item) => {
+        const id = getKey(item);
+        const existing = acc[id];
+        if (existing) {
+          const merged = new Set([
+            ...((typeof existing[mergeField] === "string"
+              ? (existing[mergeField] as string).split(", ").filter(Boolean)
+              : []) as string[]),
+            ...((typeof item[mergeField] === "string"
+              ? (item[mergeField] as string).split(", ").filter(Boolean)
+              : []) as string[]),
+          ]);
+          (existing[mergeField] as T[K]) = Array.from(merged).join(
+            ", ",
+          ) as T[K];
+        } else {
+          acc[id] = { ...item };
+        }
+        return acc;
+      },
+      {} as Record<string | number, T>,
+    ),
   );
 }

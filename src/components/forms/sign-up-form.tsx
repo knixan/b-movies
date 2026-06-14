@@ -23,7 +23,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { on } from "events";
 
 const FormSchema = z
   .object({

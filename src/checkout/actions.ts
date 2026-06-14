@@ -17,7 +17,7 @@ export interface CheckoutFormValues {
 }
 
 export async function submitOrder(
-  form: CheckoutFormValues
+  form: CheckoutFormValues,
 ): Promise<number | null> {
   const cart = await getCartFromCookie();
   if (!cart.items.length) return null;
@@ -25,7 +25,7 @@ export async function submitOrder(
   // Summa i SEK
   const totalAmount = cart.items.reduce(
     (sum, i) => sum + i.price * i.quantity,
-    0
+    0,
   );
 
   // Hämta inloggad användare via Better Auth-session från servern

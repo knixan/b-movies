@@ -2,7 +2,8 @@
 
 <img src="public/images/bmovies-blue.png" alt="B-Movies Logo" width="120" />
 
-# MovieShop Beta (B‑Movies) 
+# MovieShop Beta (B‑Movies)
+
 A copy of our school project, which I have modified a little. I (Josefine), Niklas and Amina created this project. Here is the original https://github.com/Gr-25-13/movieshop-beta
 
 Modern movie e‑commerce & catalog platform built with Next.js 15 (App Router). It demonstrates production‑style patterns for data modeling, authenticated flows, performant rendering, accessible component design, and composable server actions.
@@ -57,53 +58,60 @@ Key design tenets:
 ## Feature Summary
 
 User & Catalog
+
 - Browse, filter, and search movies (title, genre, curated lists).
 - View people (cast/crew) with associated filmography via junction modeling.
 - Light/dark theme toggle persisted per user/device.
 
 Commerce
+
 - Cookie + server driven shopping cart (quantity mutation, removal, subtotal math).
 - Checkout creating atomic Order + OrderItem records with snapshot pricing.
 - Guest-style checkout fields (extensible to full customer profiles) plus authenticated linkage.
 
 Authentication & Security
+
 - Email/password auth via better-auth (session & account tables).
 - Server + client helpers for session retrieval and gated UI branches.
 - Role field prepared for future admin policies.
 
 Administration
+
 - Admin panels for Movies, Genres, People, and Orders (CRUD via forms & dialogs).
 
 Content & Media
+
 - Dynamic poster/backdrop/profile image URLs sourced from TMDB (no local image persistence).
 - Defensive fallback imagery for absent assets.
 
 Resilience & UX
+
 - Empty states, loading transitions, and optimistic cart updates where safe.
 
 ---
 
 ## Tech Stack
 
-| Category | Tooling |
-|----------|---------|
-| Framework | Next.js 15 (App Router, Server & Client Components) |
-| Language | TypeScript 5 | 
-| Styling | Tailwind CSS 4 + utility composition |
-| UI Primitives | Radix + shadcn generated components |
-| Forms & Validation | React Hook Form + Zod |
-| ORM / DB | Prisma + PostgreSQL (BigInt support for TMDB IDs) |
-| Auth | better-auth custom integration |
-| Media Integration | TMDB (The Movie Database) poster/profile paths |
-| State (Local) | Minimal React state, cookies, server actions |
-| Icons | Lucide React |
-| Theming | next-themes |
+| Category           | Tooling                                             |
+| ------------------ | --------------------------------------------------- |
+| Framework          | Next.js 15 (App Router, Server & Client Components) |
+| Language           | TypeScript 5                                        |
+| Styling            | Tailwind CSS 4 + utility composition                |
+| UI Primitives      | Radix + shadcn generated components                 |
+| Forms & Validation | React Hook Form + Zod                               |
+| ORM / DB           | Prisma + PostgreSQL (BigInt support for TMDB IDs)   |
+| Auth               | better-auth custom integration                      |
+| Media Integration  | TMDB (The Movie Database) poster/profile paths      |
+| State (Local)      | Minimal React state, cookies, server actions        |
+| Icons              | Lucide React                                        |
+| Theming            | next-themes                                         |
 
 ---
 
 ## System Architecture
 
 High‑level flow:
+
 1. Request enters App Router; static or dynamic segment loads.
 2. Data fetched via Prisma inside Server Components or Server Actions.
 3. Client Components hydrate only for interactive surfaces (dialogs, carousels, cart controls).
@@ -111,6 +119,7 @@ High‑level flow:
 5. Checkout action performs transactional creation of Order + related OrderItems.
 
 Patterns Employed
+
 - Server Actions as the mutation layer.
 - Schema‑driven validation (Zod) at action boundaries.
 - Narrow client bundles (no global state library, no GraphQL overhead).
@@ -131,6 +140,7 @@ Core entities (see `prisma/schema.prisma`):
 - User / Session / Account / Verification: better-auth expected tables with optional moderation fields (ban state).
 
 Relational Integrity Notes
+
 - `@@unique` composite key on MovieCrew prevents duplicate role/job/character tuples.
 - BigInt usage for TMDB IDs avoids overflow for large external IDs.
 - Cascading deletes on relations keep orphan data minimal.
@@ -158,11 +168,13 @@ src/generated    # Prisma client output (configured path)
 ## Running Locally
 
 Prerequisites
+
 - Node.js 18+
 - PostgreSQL database (local or container)
 - TMDB API key
 
 Clone & Install
+
 ```bash
 git clone <YOUR_REPO_URL>
 cd movieshop-beta
@@ -171,17 +183,21 @@ npx prisma generate
 ```
 
 Database Setup (development)
+
 ```bash
 npx prisma migrate dev --name init
 ```
 
 Start Dev Server
+
 ```bash
 npm run dev
 ```
+
 Visit: http://localhost:3000
 
 Production Build
+
 ```bash
 npm run build
 npm start
@@ -192,10 +208,12 @@ npm start
 ## Environment Variables
 
 Create a `.env` file:
+
 ```bash
 DATABASE_URL="postgresql://user:password@localhost:5432/movieshop"
 TMDB_API_KEY="<your_tmdb_api_key>"
 ```
+
 Optional future additions: `REDIS_URL`, `NEXT_PUBLIC_*` analytics keys, payment provider secrets.
 
 ---
@@ -205,12 +223,14 @@ Optional future additions: `REDIS_URL`, `NEXT_PUBLIC_*` analytics keys, payment 
 Implemented with better-auth (session + account + verification tables) and custom server/client helpers.
 
 Highlights
+
 - Session retrieval inside Server Components for conditional rendering.
 - Zod backed sign‑in / sign‑up forms (React Hook Form integration).
 - Preparatory fields for role + banning / moderation logic.
 - Email uniqueness enforced at DB layer.
 
 Extensibility Paths
+
 - Add OAuth providers by extending Account entries.
 - Promote role to enum and gate admin segments.
 - Introduce password reset & email verification flows leveraging `Verification` table.
@@ -220,11 +240,13 @@ Extensibility Paths
 ## Cart & Checkout
 
 Cart
+
 - Stored as structured JSON in an HTTP cookie; server is source of truth for recalculated totals.
 - Items optionally flagged if sourced from TMDB seeded data.
 - Quantity guards & stock checks can be enforced centrally.
 
 Checkout
+
 - Single server action: validates cart snapshot, computes total, creates Order + OrderItems.
 - Captures `priceAtPurchase` to decouple from later catalog price changes.
 - Stores lightweight customer detail fields (upgrade path: normalized Address entity).
@@ -262,6 +284,7 @@ Checkout
 ## Roadmap
 
 Planned / Nice‑to‑Have
+
 - Payment provider integration & order status enum refinement.
 - Address book + shipping calculation.
 - Watchlist / favorites & recommendations (collaborative + popularity based).
@@ -282,6 +305,7 @@ We welcome educational and improvement PRs.
 5. Ensure: builds, lints, and migrations (if any) are included
 
 Coding Guidelines
+
 - Keep server action signatures small & validated.
 - Prefer pure utilities in `lib/` with unit‑testable logic.
 - Avoid duplicating data selection—extract selectors if reused.
@@ -290,11 +314,11 @@ Coding Guidelines
 
 ## Team
 
-| Member | Focus Areas |
-|--------|-------------|
+| Member   | Focus Areas                                                     |
+| -------- | --------------------------------------------------------------- |
 | Josefine | Frontend, UI/UX Design, Backend support, Logo & Visual Identity |
-| Niklas | Frontend, Backend, API integration, Authentication architecture |
-| Amina | Backend & Authentication flows |
+| Niklas   | Frontend, Backend, API integration, Authentication architecture |
+| Amina    | Backend & Authentication flows                                  |
 
 ---
 
@@ -311,4 +335,3 @@ This product uses the TMDB API but is not endorsed or certified by TMDB.
 ---
 
 Built using Next.js, Prisma, Tailwind, and modern web platform capabilities.</sub>
-

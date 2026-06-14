@@ -40,8 +40,8 @@ export default function UpdatePersonForm({ person }: UpdatePersonFormProps) {
     // they don't overwrite existing values in the database
     const cleanedData = Object.fromEntries(
       Object.entries(data).map(([key, value]) =>
-        value === "" ? [key, undefined] : [key, value]
-      )
+        value === "" ? [key, undefined] : [key, value],
+      ),
     ) as UpdatePersonInput;
 
     try {

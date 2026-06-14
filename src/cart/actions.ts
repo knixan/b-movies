@@ -13,7 +13,7 @@ export async function getCart() {
 }
 
 export async function addToCart(
-  item: Omit<CartItem, "quantity"> & { quantity?: number }
+  item: Omit<CartItem, "quantity"> & { quantity?: number },
 ) {
   const cart = await getCartFromCookie();
   const qty = Math.max(1, item.quantity ?? 1);

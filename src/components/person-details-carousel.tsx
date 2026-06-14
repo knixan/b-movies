@@ -24,12 +24,12 @@ export default function PersonDetailsCarousel({
   const castMovies = mergeByKey(
     workedOn.filter((item) => item.role === "CAST"),
     "character",
-    (item) => item.movie.id
+    (item) => item.movie.id,
   );
   const crewMovies = mergeByKey(
     workedOn.filter((item) => item.role === "CREW"),
     "job",
-    (item) => item.movie.id
+    (item) => item.movie.id,
   );
 
   return (

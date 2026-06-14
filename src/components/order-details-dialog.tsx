@@ -39,12 +39,13 @@ interface OrderDetailsDialogProps {
   children: React.ReactNode;
 }
 
-export default function OrderDetailsDialog({ order, children }: OrderDetailsDialogProps) {
+export default function OrderDetailsDialog({
+  order,
+  children,
+}: OrderDetailsDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -52,7 +53,7 @@ export default function OrderDetailsDialog({ order, children }: OrderDetailsDial
             Order #{order.id} Details
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           {/* Order Information Grid */}
           <div className="grid gap-6 md:grid-cols-2">
@@ -108,7 +109,9 @@ export default function OrderDetailsDialog({ order, children }: OrderDetailsDial
                   <p className="text-sm">
                     {order.customerPostalCode} {order.customerCity}
                   </p>
-                  <p className="text-sm">{order.customerCountry?.toUpperCase()}</p>
+                  <p className="text-sm">
+                    {order.customerCountry?.toUpperCase()}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -139,7 +142,9 @@ export default function OrderDetailsDialog({ order, children }: OrderDetailsDial
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
-                          <span className="text-xs text-gray-500">No image</span>
+                          <span className="text-xs text-gray-500">
+                            No image
+                          </span>
                         </div>
                       )}
                     </div>
@@ -185,9 +190,13 @@ export default function OrderDetailsDialog({ order, children }: OrderDetailsDial
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className={`w-6 h-6 rounded-full ${
-                    order.status === "PENDING" ? "bg-yellow-500" : "bg-primary"
-                  } text-white text-sm flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                  <div
+                    className={`w-6 h-6 rounded-full ${
+                      order.status === "PENDING"
+                        ? "bg-yellow-500"
+                        : "bg-primary"
+                    } text-white text-sm flex items-center justify-center flex-shrink-0 mt-0.5`}
+                  >
                     {order.status === "PENDING" ? "⏳" : "✓"}
                   </div>
                   <div>

@@ -113,7 +113,7 @@ export default async function PersonPage({
                     {item}
                   </PaginationLink>
                 </PaginationItem>
-              )
+              ),
             )}
 
             <PaginationItem>

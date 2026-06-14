@@ -11,7 +11,6 @@ import {
   ArrowUp,
   Film,
   UserCircle2,
-  Github,
   Info,
   SquareStack,
   Mail

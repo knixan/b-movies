@@ -54,14 +54,14 @@ export async function FindMoviesByDirectors(): Promise<MovieApi[]> {
         (person: PersonResultWithDepartment) =>
           person.name === name &&
           (person.known_for_department === "Directing" ||
-            person.known_for_department === "Writing")
+            person.known_for_department === "Writing"),
       );
 
       // Assumption made that the most popular person of the search will be on the first page
       const mostPopular = matches.reduce(
         (max, person) =>
           (person.popularity ?? 0) > (max.popularity ?? 0) ? person : max,
-        matches[0]
+        matches[0],
       );
 
       if (mostPopular && mostPopular.id) {
@@ -77,7 +77,7 @@ export async function FindMoviesByDirectors(): Promise<MovieApi[]> {
       (credit) =>
         credit.department === "Directing" &&
         credit.job === "Director" &&
-        credit.adult === false
+        credit.adult === false,
     );
 
     // We take the NUMBER_OF_MOVIES most popular movies by the director,
@@ -125,7 +125,7 @@ export async function FindMoviesByDirectors(): Promise<MovieApi[]> {
 // This means that we will only get a limited number of crew and cast members
 // to avoid making too many requests to the API.
 export async function FindCrewByMovieId(
-  movieId: number
+  movieId: number,
 ): Promise<{ crew: PersonApi[]; cast: PersonApi[] }> {
   const credits = await moviedb.movieCredits({ id: movieId });
 
@@ -169,7 +169,7 @@ export async function FindCrewByMovieId(
   const importantMembers: PersonApi[] = [];
 
   const importantJobsLower = new Set(
-    Array.from(importantJobs).map((j) => j.toLowerCase())
+    Array.from(importantJobs).map((j) => j.toLowerCase()),
   );
 
   // Helper functions to normalize job titles and create unique keys
@@ -207,7 +207,7 @@ export async function FindCrewByMovieId(
       (c) =>
         c.id &&
         c.name &&
-        !includedKeys.has(jobKey(c.id as number, normalizeJob(c.job)))
+        !includedKeys.has(jobKey(c.id as number, normalizeJob(c.job))),
     )
     .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
 
@@ -240,7 +240,7 @@ export async function FindCrewByMovieId(
 // This is needed to avoid making too many requests to the API when we first
 // add a bunch of movies and their crew and cast to the database.
 export async function FindExtraPersonInfo(
-  personId: number
+  personId: number,
 ): Promise<PersonApi> {
   // Fetch additional information about a person from TMDB
   const personInfo = await moviedb.personInfo(personId);

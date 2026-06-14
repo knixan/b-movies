@@ -8,7 +8,7 @@ export default async function Carousels() {
     Movie[],
     Movie[],
     Movie[],
-    Movie[]
+    Movie[],
   ] = await Promise.all([
     prisma.movie.findMany({ orderBy: { releaseDate: "desc" }, take: 10 }),
     prisma.movie.findMany({ orderBy: { votes: "desc" }, take: 10 }),

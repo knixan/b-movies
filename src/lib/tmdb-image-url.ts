@@ -8,7 +8,7 @@ import { BackdropSize, PosterSize, ProfileSize } from "./types";
 // Example usage: getPosterUrl("/path/to/poster.jpg", "w500");
 export function getPosterUrl(
   path: string | undefined | null,
-  size: PosterSize = "w500"
+  size: PosterSize = "w500",
 ): string | undefined {
   if (!path) return undefined;
   return `https://image.tmdb.org/t/p/${size}${path}`;
@@ -16,7 +16,7 @@ export function getPosterUrl(
 
 export function getBackdropUrl(
   path: string | undefined | null,
-  size: BackdropSize = "w1280"
+  size: BackdropSize = "w1280",
 ): string | undefined {
   if (!path) return undefined;
   return `https://image.tmdb.org/t/p/${size}${path}`;
@@ -24,7 +24,7 @@ export function getBackdropUrl(
 
 export function getProfileUrl(
   path: string | undefined | null,
-  size: ProfileSize = "w185"
+  size: ProfileSize = "w185",
 ): string | undefined {
   if (!path) return undefined;
   return `https://image.tmdb.org/t/p/${size}${path}`;

@@ -70,7 +70,7 @@ export default function ContactForm({ variant = "page" }: ContactFormProps) {
     } catch (err) {
       console.error(err);
       setStatus(
-        "An error occurred. Check your internet connection and try again."
+        "An error occurred. Check your internet connection and try again.",
       );
     }
   };
@@ -106,7 +106,8 @@ export default function ContactForm({ variant = "page" }: ContactFormProps) {
           Contact us
         </h2>
         <p className="text-muted-foreground mb-8 text-center">
-          Fill out the form below and we will get back to you as soon as possible.
+          Fill out the form below and we will get back to you as soon as
+          possible.
         </p>
 
         <Form {...form}>
@@ -166,11 +167,7 @@ export default function ContactForm({ variant = "page" }: ContactFormProps) {
                 <FormItem>
                   <FormLabel>Phone (optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      type="tel"
-                      placeholder="07X-XXX XX XX"
-                      {...field}
-                    />
+                    <Input type="tel" placeholder="07X-XXX XX XX" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

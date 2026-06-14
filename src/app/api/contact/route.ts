@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       console.error("Missing SMTP env vars");
       return NextResponse.json(
         { message: "Server email configuration missing." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -56,13 +56,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { message: "The message has been sent!" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error sending email:", error);
     return NextResponse.json(
       { message: "Could not send the message." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

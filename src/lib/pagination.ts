@@ -2,7 +2,7 @@
 export function getPaginationItems(
   totalPages: number,
   currentPage: number,
-  siblings = 1
+  siblings = 1,
 ) {
   const items: (number | "ellipsis")[] = [];
   const totalNumbers = siblings * 2 + 5; // first + last + current + 2*siblings + (2 ellipses possible)
@@ -26,6 +26,3 @@ export function getPaginationItems(
 
   return items;
 }
-
-
-

@@ -95,7 +95,7 @@ export default function AdminOrdersClient({
       setFilteredOrders(orders.filter((order) => order.status === "PENDING"));
     } else {
       setFilteredOrders(
-        orders.filter((order) => order.status === statusFilter)
+        orders.filter((order) => order.status === statusFilter),
       );
     }
   }, [orders, statusFilter]);
@@ -107,8 +107,8 @@ export default function AdminOrdersClient({
     await onStatusUpdate(fd);
     setOrders((prev) =>
       prev.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
+        order.id === orderId ? { ...order, status: newStatus } : order,
+      ),
     );
   };
 
@@ -221,8 +221,8 @@ export default function AdminOrdersClient({
           {statusFilter === "ALL"
             ? "All Orders"
             : statusFilter === "NOT_HANDLED"
-            ? "Not handled Orders"
-            : `${statusFilter} Orders`}{" "}
+              ? "Not handled Orders"
+              : `${statusFilter} Orders`}{" "}
           ({filteredOrders.length})
         </h2>
 
@@ -262,7 +262,7 @@ export default function AdminOrdersClient({
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </p>
                         </div>

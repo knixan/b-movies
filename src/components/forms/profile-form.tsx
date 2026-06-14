@@ -56,14 +56,14 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         authClient.changeEmail({
           newEmail: values.email,
           callbackURL: "/dashboard",
-        })
+        }),
       );
     }
     if (values.name !== user.name) {
       ops.push(
         authClient.updateUser({
           name: values.name,
-        })
+        }),
       );
     }
 

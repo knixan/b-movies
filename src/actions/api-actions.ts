@@ -209,7 +209,7 @@ async function addGenresToMovie(movieId: number, genres: Genre[]) {
   // Filter out genres with empty or invalid names
   const validGenres = genres.filter(
     (genre): genre is Genre & { name: string } =>
-      typeof genre.name === "string" && genre.name.trim() !== ""
+      typeof genre.name === "string" && genre.name.trim() !== "",
   );
 
   if (validGenres.length === 0) return;

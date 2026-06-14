@@ -1,6 +1,5 @@
 import CreateMovieForm from "@/components/forms/create-movies-form";
-import {  requireAdmin } from "@/lib/auth";
-
+import { requireAdmin } from "@/lib/auth";
 
 //Authorization
 export default async function AdminMoviesPage() {

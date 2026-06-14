@@ -132,9 +132,13 @@ export type LinkPersonToMovieInput = z.infer<typeof linkPersonToMovieSchema>;
 // --- Order Schemas ---
 export const updateOrderStatusSchema = z.object({
   id: z.number().int().positive(),
-  status: z.enum(["PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"], {
-    message: "Status must be PENDING, PROCESSING, SHIPPED, DELIVERED, or CANCELLED."
-  }),
+  status: z.enum(
+    ["PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"],
+    {
+      message:
+        "Status must be PENDING, PROCESSING, SHIPPED, DELIVERED, or CANCELLED.",
+    },
+  ),
 });
 
 // User (endast de fält du använder i admin)
@@ -184,7 +188,7 @@ export const checkoutOrderSchema = z.object({
       movieId: z.number(),
       quantity: z.number().min(1),
       price: z.number().min(0),
-    })
+    }),
   ),
   totalAmount: z.number().min(0),
   // userId: z.string().optional(), // Avkommentera när vi har inloggning

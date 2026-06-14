@@ -182,7 +182,7 @@ export function LinkPersonToMovieForm({ personId }: { personId: number }) {
                                 "mr-2 h-4 w-4",
                                 opt.id === field.value
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                             <span>
@@ -275,7 +275,7 @@ export function LinkPersonToMovieForm({ personId }: { personId: number }) {
                     field.onChange(
                       e.currentTarget.value === ""
                         ? undefined
-                        : Number(e.currentTarget.value)
+                        : Number(e.currentTarget.value),
                     )
                   }
                 />

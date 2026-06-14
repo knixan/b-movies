@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = {
   title: "Project Presentation | B-Movies",
-  description: "Overview of the B-Movies (MovieShop Beta) architecture and features.",
+  description:
+    "Overview of the B-Movies (MovieShop Beta) architecture and features.",
 };
 
 export default function ProjectPresentationPage() {
@@ -13,7 +14,8 @@ export default function ProjectPresentationPage() {
           Project Presentation: B-Movies
         </h1>
         <p className="text-muted-foreground">
-          MovieShop Beta is a modern movie e-commerce experience built with a clean, fast, and component-driven architecture.
+          MovieShop Beta is a modern movie e-commerce experience built with a
+          clean, fast, and component-driven architecture.
         </p>
       </header>
 
@@ -30,7 +32,10 @@ export default function ProjectPresentationPage() {
               <li>Prisma ORM with a relational database</li>
               <li>Custom authentication layer (session-based)</li>
               <li>Lucide icons</li>
-              <li>Image delivery via TMDB poster paths (on-demand, no file storage)</li>
+              <li>
+                Image delivery via TMDB poster paths (on-demand, no file
+                storage)
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -41,13 +46,25 @@ export default function ProjectPresentationPage() {
           </CardHeader>
           <CardContent className="text-sm space-y-2">
             <ul className="list-disc pl-5 space-y-1">
-              <li>Secure user authentication (sign in dialog + profile dropdown)</li>
-              <li>Settings page with profile + extensible account management</li>
-              <li>Order history page (My Orders) with per-order detail dialog</li>
-              <li>Structured order model with line items & pricing snapshots</li>
-              <li>Interactive order details popup (no PDFs, no external libs)</li>
+              <li>
+                Secure user authentication (sign in dialog + profile dropdown)
+              </li>
+              <li>
+                Settings page with profile + extensible account management
+              </li>
+              <li>
+                Order history page (My Orders) with per-order detail dialog
+              </li>
+              <li>
+                Structured order model with line items & pricing snapshots
+              </li>
+              <li>
+                Interactive order details popup (no PDFs, no external libs)
+              </li>
               <li>Checkout success flow reused for order specification</li>
-              <li>Movie browsing with poster thumbnails & graceful fallbacks</li>
+              <li>
+                Movie browsing with poster thumbnails & graceful fallbacks
+              </li>
               <li>Responsive, accessible UI components</li>
             </ul>
           </CardContent>
@@ -64,7 +81,9 @@ export default function ProjectPresentationPage() {
               <li>Server Actions for secure mutations (profile + orders)</li>
               <li>Lean server components for data fetching</li>
               <li>Client components only where interactivity is needed</li>
-              <li>Composable UI using shadcn patterns (Dialog, Card, Button)</li>
+              <li>
+                Composable UI using shadcn patterns (Dialog, Card, Button)
+              </li>
               <li>Consistent design tokens via Tailwind utilities</li>
               <li>Defensive rendering & empty states</li>
               <li>Clear separation of concerns (forms, actions, display)</li>
@@ -109,10 +128,13 @@ export default function ProjectPresentationPage() {
           </CardHeader>
           <CardContent className="text-sm space-y-2">
             <p>
-              This foundation accelerates adding features like saved addresses, re-ordering,
-              recommendations, payment history, and watchlists without refactoring core systems.
+              This foundation accelerates adding features like saved addresses,
+              re-ordering, recommendations, payment history, and watchlists
+              without refactoring core systems.
             </p>
-            <p className="font-medium">Concise, scalable, and production-aligned.</p>
+            <p className="font-medium">
+              Concise, scalable, and production-aligned.
+            </p>
           </CardContent>
         </Card>
       </section>

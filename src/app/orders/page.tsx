@@ -34,7 +34,8 @@ export default async function OrdersPage() {
             <Package className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold mb-2">No orders yet</h2>
             <p className="text-muted-foreground mb-4">
-              You haven&apos;t made any orders yet. Start shopping to see your orders here!
+              You haven&apos;t made any orders yet. Start shopping to see your
+              orders here!
             </p>
             <Link
               href="/movies"
@@ -61,14 +62,17 @@ export default async function OrdersPage() {
                         {order.orderDate.toLocaleDateString("sv-SE")}
                       </span>
                       <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs">
-                        {order.status === "PENDING" ? "Processing" : order.status}
+                        {order.status === "PENDING"
+                          ? "Processing"
+                          : order.status}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold">{order.totalAmount} SEK</p>
                     <p className="text-sm text-muted-foreground">
-                      {order.OrderItem.length} {order.OrderItem.length === 1 ? 'item' : 'items'}
+                      {order.OrderItem.length}{" "}
+                      {order.OrderItem.length === 1 ? "item" : "items"}
                     </p>
                   </div>
                 </div>
@@ -91,7 +95,9 @@ export default async function OrdersPage() {
                           />
                         ) : (
                           <div className="w-full h-full bg-gray-300 rounded flex items-center justify-center">
-                            <span className="text-xs text-gray-500">No image</span>
+                            <span className="text-xs text-gray-500">
+                              No image
+                            </span>
                           </div>
                         )}
                       </div>

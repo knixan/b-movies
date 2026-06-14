@@ -170,7 +170,7 @@ export default async function MoviesPage({
                     {item}
                   </PaginationLink>
                 </PaginationItem>
-              )
+              ),
             )}
 
             <PaginationItem>

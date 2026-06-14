@@ -15,7 +15,7 @@ export async function getAllOrders() {
       },
     });
     return orders;
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -41,7 +41,7 @@ export async function getUserOrders(userId: string) {
       },
     });
     return orders;
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -63,7 +63,7 @@ export async function getOrderById(orderId: string) {
         },
       },
     });
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -82,7 +82,7 @@ export async function createOrder(formData: FormData) {
   }
 
   try {
-    const order = await prisma.order.create({
+    await prisma.order.create({
       data: {
         user: { connect: { id: userId } },
         totalAmount: 0, // Initial amount, can be updated when items are added
@@ -94,7 +94,7 @@ export async function createOrder(formData: FormData) {
     });
     revalidatePath("/admin/orders");
     return { success: true };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       errors: { _global: ["Kunde inte skapa ordern."] },
@@ -121,7 +121,7 @@ export async function deleteOrder(formData: FormData) {
     });
     revalidatePath("/admin/orders");
     return { success: true };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       errors: { _global: ["Kunde inte ta bort ordern."] },
@@ -153,7 +153,7 @@ export async function updateOrderStatus(formData: FormData) {
     revalidatePath("/admin/orders");
     revalidatePath(`/admin/orders/${validated.data.id}`);
     return { success: true, message: `Order status updated to ${validated.data.status}` };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       errors: { _global: ["Could not update order status."] },
@@ -209,7 +209,7 @@ export async function addOrderItem(formData: FormData) {
 
     revalidatePath(`/admin/orders/${orderId}`);
     return { success: true, message: `Added ${movie.title} to order` };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       errors: { _global: ["Could not add item to order."] },
@@ -258,7 +258,7 @@ export async function removeOrderItem(formData: FormData) {
 
     revalidatePath(`/admin/orders/${orderItem.orderId}`);
     return { success: true, message: "Item removed from order" };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       errors: { _global: ["Could not remove item from order."] },
