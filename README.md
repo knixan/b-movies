@@ -2,7 +2,8 @@
 
 <img src="public/images/bmovies-blue.png" alt="B-Movies Logo" width="120" />
 
-# MovieShop Beta (B‑Movies)
+# MovieShop Beta (B‑Movies) 
+A copy of our school project, which I have modified a little. I (Josefine), Niklas and Amina created this project. Here is the original https://github.com/Gr-25-13/movieshop-beta
 
 Modern movie e‑commerce & catalog platform built with Next.js 15 (App Router). It demonstrates production‑style patterns for data modeling, authenticated flows, performant rendering, accessible component design, and composable server actions.
 
