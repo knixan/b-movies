@@ -1,10 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+"use server";
+
 import nodemailer from "nodemailer";
 import { z } from "zod";
 
-export const runtime = "nodejs"; // ensure Node runtime for nodemailer
-
-const FormSchema = z.object({
+const ContactFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
@@ -16,18 +15,17 @@ const FormSchema = z.object({
     .max(2000, "Max 2000 characters"),
 });
 
-export async function POST(req: NextRequest) {
+export type ContactFormValues = z.infer<typeof ContactFormSchema>;
+
+export async function sendContactAction(values: ContactFormValues) {
   try {
-    const body = await req.json();
-    const values = await FormSchema.parseAsync(body);
+    const validated = await ContactFormSchema.parseAsync(values);
 
     const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
+
     if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
       console.error("Missing SMTP env vars");
-      return NextResponse.json(
-        { message: "Server email configuration missing." },
-        { status: 500 },
-      );
+      return { success: false, message: "Server email configuration missing." };
     }
 
     const transporter = nodemailer.createTransport({
@@ -43,26 +41,20 @@ export async function POST(req: NextRequest) {
       subject: "New message from the website contact form",
       html: `
         <h2>Contact Inquiry</h2>
-        <p><strong>Name:</strong> ${values.firstName} ${values.lastName}</p>
-        <p><strong>Email:</strong> ${values.email}</p>
-        <p><strong>Phone:</strong> ${values.phone ?? ""}</p>
-        <p><strong>City/Location:</strong> ${values.city ?? ""}</p>
+        <p><strong>Name:</strong> ${validated.firstName} ${validated.lastName}</p>
+        <p><strong>Email:</strong> ${validated.email}</p>
+        <p><strong>Phone:</strong> ${validated.phone ?? ""}</p>
+        <p><strong>City/Location:</strong> ${validated.city ?? ""}</p>
         <p><strong>Message:</strong></p>
-        <p>${values.message}</p>
+        <p>${validated.message}</p>
       `,
     };
 
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json(
-      { message: "The message has been sent!" },
-      { status: 200 },
-    );
+    return { success: true, message: "The message has been sent!" };
   } catch (error) {
     console.error("Error sending email:", error);
-    return NextResponse.json(
-      { message: "Could not send the message." },
-      { status: 500 },
-    );
+    return { success: false, message: "Could not send the message." };
   }
 }
