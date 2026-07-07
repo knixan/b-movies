@@ -70,9 +70,8 @@ export async function getOrderById(orderId: string) {
 
 // --- Skapa en ny order (används av kassan, ej admin) ---
 export async function createOrder(formData: FormData) {
-
-   //Authorization
-    await requireAdmin();
+  //Authorization
+  await requireAdmin();
 
   const data = Object.fromEntries(formData);
   const userId = data.userId as string;
@@ -104,9 +103,8 @@ export async function createOrder(formData: FormData) {
 
 // --- Ta bort en order ---
 export async function deleteOrder(formData: FormData) {
-
-   //Authorization
-    await requireAdmin();
+  //Authorization
+  await requireAdmin();
 
   const data = Object.fromEntries(formData);
   const orderId = Number(data.id);
@@ -131,10 +129,9 @@ export async function deleteOrder(formData: FormData) {
 
 // --- Uppdatera en orders status ---
 export async function updateOrderStatus(formData: FormData) {
+  //Authorization
+  await requireAdmin();
 
-   //Authorization
-    await requireAdmin();
-    
   const data = Object.fromEntries(formData);
   const validated = updateOrderStatusSchema.safeParse({
     ...data,
@@ -152,7 +149,10 @@ export async function updateOrderStatus(formData: FormData) {
     });
     revalidatePath("/admin/orders");
     revalidatePath(`/admin/orders/${validated.data.id}`);
-    return { success: true, message: `Order status updated to ${validated.data.status}` };
+    return {
+      success: true,
+      message: `Order status updated to ${validated.data.status}`,
+    };
   } catch {
     return {
       success: false,
@@ -164,21 +164,24 @@ export async function updateOrderStatus(formData: FormData) {
 // --- Lägg till item till order ---
 export async function addOrderItem(formData: FormData) {
   await requireAdmin();
-  
+
   const data = Object.fromEntries(formData);
   const orderId = Number(data.orderId);
   const movieId = Number(data.movieId);
   const quantity = Number(data.quantity) || 1;
 
   if (!orderId || !movieId) {
-    return { success: false, errors: { _global: ["Invalid order ID or movie ID."] } };
+    return {
+      success: false,
+      errors: { _global: ["Invalid order ID or movie ID."] },
+    };
   }
 
   try {
     // Get movie price
     const movie = await prisma.movie.findUnique({
       where: { id: movieId },
-      select: { price: true, title: true }
+      select: { price: true, title: true },
     });
 
     if (!movie) {
@@ -199,9 +202,12 @@ export async function addOrderItem(formData: FormData) {
     const orderItems = await prisma.orderItem.findMany({
       where: { orderId },
     });
-    
-    const newTotal = orderItems.reduce((sum, item) => sum + (item.priceAtPurchase * item.quantity), 0);
-    
+
+    const newTotal = orderItems.reduce(
+      (sum, item) => sum + item.priceAtPurchase * item.quantity,
+      0,
+    );
+
     await prisma.order.update({
       where: { id: orderId },
       data: { totalAmount: newTotal },
@@ -220,7 +226,7 @@ export async function addOrderItem(formData: FormData) {
 // --- Ta bort item från order ---
 export async function removeOrderItem(formData: FormData) {
   await requireAdmin();
-  
+
   const data = Object.fromEntries(formData);
   const orderItemId = Number(data.orderItemId);
 
@@ -232,7 +238,7 @@ export async function removeOrderItem(formData: FormData) {
     // Get order item to get order ID before deleting
     const orderItem = await prisma.orderItem.findUnique({
       where: { id: orderItemId },
-      select: { orderId: true }
+      select: { orderId: true },
     });
 
     if (!orderItem) {
@@ -248,9 +254,12 @@ export async function removeOrderItem(formData: FormData) {
     const remainingItems = await prisma.orderItem.findMany({
       where: { orderId: orderItem.orderId },
     });
-    
-    const newTotal = remainingItems.reduce((sum, item) => sum + (item.priceAtPurchase * item.quantity), 0);
-    
+
+    const newTotal = remainingItems.reduce(
+      (sum, item) => sum + item.priceAtPurchase * item.quantity,
+      0,
+    );
+
     await prisma.order.update({
       where: { id: orderItem.orderId },
       data: { totalAmount: newTotal },

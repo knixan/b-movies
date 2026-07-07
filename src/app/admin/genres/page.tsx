@@ -4,8 +4,11 @@ import { getAllGenres } from "@/actions/genres";
 import CreateGenreForm from "@/components/forms/create-genre-form";
 import DeleteGenreButton from "@/components/forms/delete-genre-button";
 import EditGenreDialog from "@/components/forms/edit-genre-dialog";
+import { requireAdmin } from "@/lib/auth";
 
 export default async function AdminGenresPage() {
+  await requireAdmin();
+
   const genres = await getAllGenres();
 
   return (

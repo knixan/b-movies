@@ -22,9 +22,36 @@ export async function submitOrder(
   const cart = await getCartFromCookie();
   if (!cart.items.length) return null;
 
-  // Summa i SEK
-  const totalAmount = cart.items.reduce(
-    (sum, i) => sum + i.price * i.quantity,
+  // Hämta filmerna från databasen så att pris och lagersaldo är
+  // auktoritativa - klienten (och därmed cart-cookien) litar vi aldrig på.
+  const movies = await prisma.movie.findMany({
+    where: { id: { in: cart.items.map((i) => i.id) } },
+    select: { id: true, price: true, stock: true },
+  });
+  const movieById = new Map(movies.map((m) => [m.id, m]));
+
+  const orderItems: {
+    movieId: number;
+    quantity: number;
+    priceAtPurchase: number;
+  }[] = [];
+
+  for (const item of cart.items) {
+    const movie = movieById.get(item.id);
+    // Filmen finns inte längre, eller det finns inte tillräckligt i lager
+    if (!movie || movie.stock < item.quantity) {
+      return null;
+    }
+    orderItems.push({
+      movieId: movie.id,
+      quantity: item.quantity,
+      priceAtPurchase: movie.price,
+    });
+  }
+
+  // Summa i SEK, beräknad från databasens priser - inte cookien
+  const totalAmount = orderItems.reduce(
+    (sum, i) => sum + i.priceAtPurchase * i.quantity,
     0,
   );
 
@@ -60,31 +87,49 @@ export async function submitOrder(
     }
   }
 
-  // Spara kunduppgifter med ordern (använd formulärdata)
-  const order = await prisma.order.create({
-    data: {
-      status: "PENDING",
-      orderDate: new Date(),
-      totalAmount: totalAmount,
-      userId,
-      // Spara kunduppgifter från formuläret
-      customerEmail: form.email,
-      customerFirstName: form.firstName,
-      customerLastName: form.lastName,
-      customerAddress: form.address,
-      customerCity: form.city,
-      customerPostalCode: form.postalCode,
-      customerCountry: form.country,
-      OrderItem: {
-        create: cart.items.map((i) => ({
-          movieId: i.id,
-          quantity: i.quantity,
-          priceAtPurchase: i.price,
-        })),
-      },
-    },
-    select: { id: true },
-  });
+  // Spara kunduppgifter med ordern (använd formulärdata) och dra av
+  // lagersaldo atomärt så att vi aldrig säljer mer än vad som finns i lager.
+  let order: { id: number };
+  try {
+    order = await prisma.$transaction(async (tx) => {
+      const created = await tx.order.create({
+        data: {
+          status: "PENDING",
+          orderDate: new Date(),
+          totalAmount: totalAmount,
+          userId,
+          // Spara kunduppgifter från formuläret
+          customerEmail: form.email,
+          customerFirstName: form.firstName,
+          customerLastName: form.lastName,
+          customerAddress: form.address,
+          customerCity: form.city,
+          customerPostalCode: form.postalCode,
+          customerCountry: form.country,
+          OrderItem: {
+            create: orderItems,
+          },
+        },
+        select: { id: true },
+      });
+
+      for (const item of orderItems) {
+        const { count } = await tx.movie.updateMany({
+          where: { id: item.movieId, stock: { gte: item.quantity } },
+          data: { stock: { decrement: item.quantity } },
+        });
+        // Någon annan hann köpa av samma lager mellan valideringen ovan
+        // och transaktionen - avbryt hela ordern.
+        if (count === 0) {
+          throw new Error("Insufficient stock");
+        }
+      }
+
+      return created;
+    });
+  } catch {
+    return null;
+  }
 
   // Explicit cookie clearing med verifiering
   console.log("🛒 Clearing cart cookie after order creation...");

@@ -15,6 +15,9 @@ import { requireAdmin } from "@/lib/auth";
 
 // Create a new genre
 export async function createGenre(input: CreateGenreInput) {
+  //Authorization
+  await requireAdmin();
+
   const validated = await createGenreSchema.parseAsync(input);
   const genre = await prisma.genre.create({ data: validated });
   revalidatePath("/admin/genres");
@@ -23,6 +26,9 @@ export async function createGenre(input: CreateGenreInput) {
 
 // Update existing genre
 export async function updateGenre(input: UpdateGenreInput) {
+  //Authorization
+  await requireAdmin();
+
   const validated = await updateGenreSchema.parseAsync(input);
   const genre = await prisma.genre.update({
     where: { id: validated.id },
