@@ -6,7 +6,7 @@
 
 A copy of our school project, which I have modified a little. I (Josefine), Niklas and Amina created this project. Here is the original https://github.com/Gr-25-13/movieshop-beta
 
-Modern movie e‑commerce & catalog platform built with Next.js 15 (App Router). It demonstrates production‑style patterns for data modeling, authenticated flows, performant rendering, accessible component design, and composable server actions.
+Modern movie e‑commerce & catalog platform built with Next.js 16 (App Router). It demonstrates production‑style patterns for data modeling, authenticated flows, performant rendering, accessible component design, and composable server actions.
 
 ![MovieShop Beta Mockup](public/images/mockup-bmovies.jpg)
 
@@ -14,7 +14,7 @@ Modern movie e‑commerce & catalog platform built with Next.js 15 (App Router).
 
 <br/>
 
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white) ![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js) ![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.x-38B2AC?logo=tailwind-css&logoColor=white) ![Auth](https://img.shields.io/badge/better--auth-Custom-green) ![License](https://img.shields.io/badge/License-Portfolio-lightgrey)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white) ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.x-38B2AC?logo=tailwind-css&logoColor=white) ![Auth](https://img.shields.io/badge/better--auth-Custom-green) ![License](https://img.shields.io/badge/License-Portfolio-lightgrey)
 
 </div>
 
@@ -94,7 +94,7 @@ Resilience & UX
 
 | Category           | Tooling                                             |
 | ------------------ | --------------------------------------------------- |
-| Framework          | Next.js 15 (App Router, Server & Client Components) |
+| Framework          | Next.js 16 (App Router, Server & Client Components) |
 | Language           | TypeScript 5                                        |
 | Styling            | Tailwind CSS 4 + utility composition                |
 | UI Primitives      | Radix + shadcn generated components                 |
@@ -211,10 +211,24 @@ Create a `.env` file:
 
 ```bash
 DATABASE_URL="postgresql://user:password@localhost:5432/movieshop"
-TMDB_API_KEY="<your_tmdb_api_key>"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+BETTER_AUTH_SECRET="<random_32+_char_secret>"
+BETTER_AUTH_URL="http://localhost:3000"
+TMDB_API_KEY="<your_tmdb_api_key>" - bör ligga här
+```
+Hårkodad med flit i src/lib/tmdb.ts, rad 4:
+const moviedb = new MovieDb("c0d3fc45d2f4922af3c27e30726b5daa");
+
+For the contact form (sent via `nodemailer`), also add:
+
+```bash
+SMTP_HOST="<your_smtp_host>"
+SMTP_PORT="<your_smtp_port>"
+SMTP_USER="<your_smtp_username>"
+SMTP_PASS="<your_smtp_password>"
 ```
 
-Optional future additions: `REDIS_URL`, `NEXT_PUBLIC_*` analytics keys, payment provider secrets.
+Optional future additions: `REDIS_URL`, payment provider secrets.
 
 ---
 
