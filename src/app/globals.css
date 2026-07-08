@@ -14,7 +14,7 @@
   --popover-foreground: oklch(0.18 0.015 25);
 
   /* Netflix-röd */
-  --primary: oklch(50.381% 0.18926 25.035);
+  --primary: oklch(48.286% 0.1793 24.814);
   --primary-foreground: oklch(0.98 0.005 30);
 
   --secondary: oklch(0.92 0.02 28);
@@ -99,7 +99,7 @@
   --popover: oklch(0.18 0.015 20);
   --popover-foreground: oklch(0.95 0.005 20);
 
-  --primary: oklch(0.6 0.23 25);
+  --primary: oklch(48.286% 0.1793 24.814);
   --primary-foreground: oklch(0.98 0.005 20);
 
   --secondary: oklch(0.22 0.015 20);
