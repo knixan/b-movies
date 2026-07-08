@@ -106,9 +106,9 @@ export default async function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full sm:max-w-xs">
+              <SheetTitle className="sr-only">Menu</SheetTitle>
               <MobileLinks toplists={toplists} isLoggedIn={isLoggedIn} />
             </SheetContent>
-            <SheetTitle className="sr-only">menu</SheetTitle>
           </Sheet>
         </div>
 
