@@ -58,7 +58,7 @@ export default async function Navbar() {
             className="h-12 w-auto hidden dark:block"
           />
           <Image
-            src="/images/bmovies-blue.png"
+            src="/images/bmovies.png"
             alt="B-Movies logo"
             width={600}
             height={600}

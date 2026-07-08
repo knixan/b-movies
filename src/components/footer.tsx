@@ -67,7 +67,7 @@ export function Footer() {
               <Image
                 src={
                   theme === "light"
-                    ? "/images/bmovies-blue.png"
+                    ? "/images/bmovies.png"
                     : "/images/bmovies.png"
                 }
                 alt="B-Movies logo"
