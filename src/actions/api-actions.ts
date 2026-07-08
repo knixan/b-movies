@@ -72,8 +72,6 @@ export async function addMoviesAndCrewFromTmdb() {
       await addGenresToMovie(addedMovie.id, movie.genres);
     }
 
-    console.log("Added Movie:", { addedMovie });
-
     for (const actor of crew.cast) {
       if (!actor.id || !actor.name) continue;
       const addedCastMember = await prisma.person.upsert({
@@ -104,8 +102,6 @@ export async function addMoviesAndCrewFromTmdb() {
         character: actor.character,
         order: actor.order,
       });
-
-      console.log("Added to Cast:", { addedCastMember });
     }
 
     for (const crewMember of crew.crew) {
@@ -146,8 +142,6 @@ export async function addMoviesAndCrewFromTmdb() {
         character: crewMember.character,
         order: crewMember.order,
       });
-
-      console.log("Added to Crew:", { addedCrewMember });
     }
   }
 }

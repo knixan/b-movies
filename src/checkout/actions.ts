@@ -6,16 +6,9 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { createOrderAccessToken } from "./order-token";
+import { checkoutOrderSchema, type CheckoutOrderInput } from "@/lib/zod-schemas";
 
-export interface CheckoutFormValues {
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  postalCode: string; // "123 45"
-  country: "se";
-}
+export type CheckoutFormValues = CheckoutOrderInput;
 
 export interface SubmitOrderResult {
   orderId: number;
@@ -23,8 +16,14 @@ export interface SubmitOrderResult {
 }
 
 export async function submitOrder(
-  form: CheckoutFormValues,
+  rawForm: CheckoutFormValues,
 ): Promise<SubmitOrderResult | null> {
+  // Validera kunduppgifterna från formuläret vid gränsen - lita aldrig på
+  // ett oparsat objekt bara för att det råkar matcha TypeScript-typen.
+  const parsed = checkoutOrderSchema.safeParse(rawForm);
+  if (!parsed.success) return null;
+  const form = parsed.data;
+
   const cart = await getCartFromCookie();
   if (!cart.items.length) return null;
 
@@ -144,16 +143,7 @@ export async function submitOrder(
     return null;
   }
 
-  // Explicit cookie clearing med verifiering
-  console.log("🛒 Clearing cart cookie after order creation...");
   await clearCartCookie();
-
-  // Vänta lite för att säkerställa att cookien hinner sparas
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
-  // Verifiera att cookien är tömd
-  const clearedCart = await getCartFromCookie();
-  console.log("✅ Cart after clearing:", clearedCart);
 
   revalidatePath("/", "layout");
   revalidatePath("/checkout");

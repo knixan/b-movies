@@ -177,21 +177,13 @@ export const orderSchema = z.object({
 
 // --- Checkout Order Schema ---
 export const checkoutOrderSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  street: z.string().min(1, { message: "Street is required" }),
-  zipcode: z.string().min(1, { message: "Zip code is required" }),
-  city: z.string().min(1, { message: "City is required" }),
   email: z.string().email({ message: "Valid e-mail is required" }),
-  phone: z.string().min(1, { message: "Phone number is required" }),
-  items: z.array(
-    z.object({
-      movieId: z.number(),
-      quantity: z.number().min(1),
-      price: z.number().min(0),
-    }),
-  ),
-  totalAmount: z.number().min(0),
-  // userId: z.string().optional(), // Avkommentera när vi har inloggning
+  firstName: z.string().min(1, { message: "First name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  address: z.string().min(1, { message: "Address is required" }),
+  city: z.string().min(1, { message: "City is required" }),
+  postalCode: z.string().min(1, { message: "Postal code is required" }),
+  country: z.literal("se"),
 });
 
 export type CheckoutOrderInput = z.infer<typeof checkoutOrderSchema>;
