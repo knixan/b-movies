@@ -23,9 +23,9 @@ export default async function CheckoutPage() {
       postalCode: String(formData.get("postalCode") || ""),
       country: "se",
     };
-    const orderId = await submitOrder(values); // Returns order ID or null
-    if (orderId) {
-      redirect(`/checkout/success/${orderId}`); // Redirect to success page with order ID
+    const result = await submitOrder(values); // Returns order id + access token, or null
+    if (result) {
+      redirect(`/checkout/success/${result.orderId}?token=${result.token}`);
     }
     redirect("/checkout"); // If order failed, stay on checkout page
   }

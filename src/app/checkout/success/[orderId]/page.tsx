@@ -3,11 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Package, Calendar, CreditCard } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getPosterUrl } from "@/lib/tmdb-image-url";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { isValidOrderAccessToken } from "@/checkout/order-token";
 import Link from "next/link";
 import Image from "next/image";
 
 interface SuccessPageProps {
   params: Promise<{ orderId: string }>;
+  searchParams: Promise<{ token?: string }>;
 }
 
 async function getOrderDetails(orderId: string) {
@@ -36,11 +40,22 @@ async function getOrderDetails(orderId: string) {
 
 export default async function CheckoutSuccessPage({
   params,
+  searchParams,
 }: SuccessPageProps) {
   const { orderId } = await params;
+  const { token } = await searchParams;
   const order = await getOrderDetails(orderId);
 
   if (!order) {
+    notFound();
+  }
+
+  // Order-id:n är sekventiella, så vi kan inte lita på att bara känna till
+  // ett giltigt id. Kräv att sessionen äger ordern, eller att en giltig
+  // token (utfärdad vid köpet) skickades med i länken.
+  const session = await auth.api.getSession({ headers: await headers() });
+  const ownsOrder = session?.user?.id === order.userId;
+  if (!ownsOrder && !isValidOrderAccessToken(order.id, token)) {
     notFound();
   }
 

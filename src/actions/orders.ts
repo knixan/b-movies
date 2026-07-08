@@ -3,10 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { updateOrderStatusSchema } from "@/lib/zod-schemas";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin, getSession } from "@/lib/auth";
 
 // --- Hämta alla ordrar ---
 export async function getAllOrders() {
+  //Authorization
+  await requireAdmin();
+
   try {
     const orders = await prisma.order.findMany({
       orderBy: { createdAt: "desc" },
@@ -22,6 +25,12 @@ export async function getAllOrders() {
 
 // --- Hämta användarens ordrar ---
 export async function getUserOrders(userId: string) {
+  //Authorization: man får bara hämta sina egna ordrar, om man inte är admin
+  const session = await getSession();
+  if (!session || (session.user.id !== userId && session.user.role !== "admin")) {
+    return [];
+  }
+
   try {
     const orders = await prisma.order.findMany({
       where: { userId },
@@ -46,8 +55,11 @@ export async function getUserOrders(userId: string) {
   }
 }
 
-// --- Hämta en order med ID ---
+// --- Hämta en order med ID (används av admin) ---
 export async function getOrderById(orderId: string) {
+  //Authorization
+  await requireAdmin();
+
   const id = Number(orderId);
   if (isNaN(id)) return null;
 

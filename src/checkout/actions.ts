@@ -5,6 +5,7 @@ import { clearCartCookie, getCartFromCookie } from "@/cart/cookie";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { createOrderAccessToken } from "./order-token";
 
 export interface CheckoutFormValues {
   email: string;
@@ -16,9 +17,14 @@ export interface CheckoutFormValues {
   country: "se";
 }
 
+export interface SubmitOrderResult {
+  orderId: number;
+  token: string;
+}
+
 export async function submitOrder(
   form: CheckoutFormValues,
-): Promise<number | null> {
+): Promise<SubmitOrderResult | null> {
   const cart = await getCartFromCookie();
   if (!cart.items.length) return null;
 
@@ -69,7 +75,14 @@ export async function submitOrder(
     });
 
     if (existingUser) {
-      // Använd befintlig användare
+      // Låt aldrig en oautentiserad gäst-checkout koppla sig till ett
+      // riktigt, registrerat konto bara genom att ange dess e-postadress
+      // - det skulle låta vem som helst "kapa" någon annans orderhistorik.
+      // Vi återanvänder bara rader som själva skapades av en tidigare
+      // gäst-checkout (samma "guest_"-prefix).
+      if (!existingUser.id.startsWith("guest_")) {
+        return null;
+      }
       userId = existingUser.id;
     } else {
       // Skapa ny gästanvändare
@@ -145,5 +158,5 @@ export async function submitOrder(
   revalidatePath("/", "layout");
   revalidatePath("/checkout");
 
-  return order.id;
+  return { orderId: order.id, token: createOrderAccessToken(order.id) };
 }
